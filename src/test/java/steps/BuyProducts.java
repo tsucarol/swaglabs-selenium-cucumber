@@ -12,6 +12,7 @@ import pages.LoginPage;
 import pages.InventoryPage;
 import pages.Base;
 import pages.CartPage;
+import pages.CheckoutPage;
 import pages.PreCheckoutPage;
 
 public class BuyProducts {
@@ -20,6 +21,7 @@ public class BuyProducts {
     private InventoryPage inventoryPage;
     private CartPage cartPage;
     private PreCheckoutPage preCheckoutPage;
+    private CheckoutPage checkoutPage;
 
     public String username;
     public String password;
@@ -91,7 +93,6 @@ public class BuyProducts {
         assertEquals(expected_count, inventoryPage.getCartItemCount());
     }
 
-    /* PRE-CHECKOUT TEST */
     @Given("I am on the cart page {string}")
     public void i_am_on_the_cart_page(String url) {
         cartPage = new CartPage(driver);
@@ -114,4 +115,29 @@ public class BuyProducts {
     }
 
     /* CHECKOUT TESTS */
+    @Given("I am on the pre-checkout page {string}")
+    public void i_am_on_the_pre_checkout_page(String url) {
+        preCheckoutPage = new PreCheckoutPage(driver);
+        preCheckoutPage.accessPreCheckoutPage(url);
+        
+        assertEquals("Swag Labs", preCheckoutPage.getTabTitle());
+        assertEquals("Checkout: Your Information", preCheckoutPage.getHeader());
+        assertEquals("https://www.saucedemo.com/checkout-step-one.html", preCheckoutPage.getUrl());
+    }
+
+    @When("I enter my informations")
+    public void i_enter_my_informations() {
+        preCheckoutPage.fillInformations("Teste", "Da Silva", "00000000");
+    }
+
+    @When("click Continue button")
+    public void click_continue_button() {
+        preCheckoutPage.clickBtnContinue();
+        checkoutPage = new CheckoutPage(driver);
+    }
+
+    @Then("I should be redirected to the checkout page")
+    public void i_should_be_redirected_to_the_checkout_page() {
+        assertEquals("https://www.saucedemo.com/checkout-step-two.html", checkoutPage.getUrl());
+    }
 }
