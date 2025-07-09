@@ -11,11 +11,15 @@ import io.cucumber.java.en.When;
 import pages.LoginPage;
 import pages.InventoryPage;
 import pages.Base;
+import pages.CartPage;
+import pages.PreCheckoutPage;
 
 public class BuyProducts {
     final WebDriver driver;
     private LoginPage loginPage;
     private InventoryPage inventoryPage;
+    private CartPage cartPage;
+    private PreCheckoutPage preCheckoutPage;
 
     public String username;
     public String password;
@@ -87,23 +91,26 @@ public class BuyProducts {
         assertEquals(expected_count, inventoryPage.getCartItemCount());
     }
 
-    
+    /* PRE-CHECKOUT TEST */
     @Given("I am on the cart page {string}")
-    public void i_am_on_the_cart_page(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void i_am_on_the_cart_page(String url) {
+        cartPage = new CartPage(driver);
+        cartPage.accessCartPage(url);
+
+        assertEquals("Swag Labs", cartPage.getTabTitle());
+        assertEquals("Your Cart", cartPage.getHeader());
+        assertEquals("https://www.saucedemo.com/cart.html", cartPage.getUrl());
     }
 
     @When("I click Checkout button")
     public void i_click_checkout_button() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        cartPage.clickBtnCheckout();
+        preCheckoutPage = new PreCheckoutPage(driver);
     }
 
-    @Then("I should be redirected to the checkout page")
-    public void i_should_be_redirected_to_the_checkout_page() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    @Then("I should be redirected to the pre-checkout page")
+    public void i_should_be_redirected_to_the_precheckout_page() {
+        assertEquals("https://www.saucedemo.com/checkout-step-one.html", preCheckoutPage.getUrl());
     }
 
     /* CHECKOUT TESTS */

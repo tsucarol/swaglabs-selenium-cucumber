@@ -37,7 +37,7 @@ Examples:
 | Sauce Labs Bolt T-Shirt  | 1              |
 
 @cart
-Scenario: Cart page: pre-checkout
+Scenario: Cart page
     Given I am on the cart page "https://www.saucedemo.com/cart.html"
     When I click Checkout button
-    Then I should be redirected to the checkout page 
+    Then I should be redirected to the pre-checkout page 
